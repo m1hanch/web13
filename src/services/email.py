@@ -20,11 +20,34 @@ env = Environment(
 
 
 def render_template(template_name, **template_vars):
+    """
+    The render_template function takes a template name and a variable list of
+    template variables and returns the rendered template as a string.
+
+
+    :param template_name: Specify the name of the template to be rendered
+    :param **template_vars: Pass in a dictionary of variables to the template
+    :return: A string
+    :doc-author: Trelent
+    """
     template = env.get_template(template_name)
     return template.render(**template_vars)
 
 
 async def send_email(email, username, host):
+    """
+    The send_email function sends an email to the user with a link that they can click on to verify their email address.
+    The function takes in three arguments:
+        - The user's email address (email)
+        - The username of the user (username)
+        - The hostname of the server where this application is running (host). This will be used for constructing links.
+
+    :param email: Send the email to
+    :param username: Display the username in the email
+    :param host: Create a link to the verification page
+    :return: A coroutine, so we need to await it
+    :doc-author: Trelent
+    """
     try:
         # Create the email token
         token_verification = auth_service.create_email_token({"sub": email})
@@ -49,6 +72,14 @@ async def send_email(email, username, host):
 
 
 async def send_reset_password_email(email, host):
+    """
+    The send_reset_password_email function sends an email to the user with a link to reset their password.
+
+    :param email: Identify the user in the database
+    :param host: Create the link to reset the password
+    :return: A token
+    :doc-author: Trelent
+    """
     try:
         # Create the email token
         token_verification = auth_service.create_email_token({"sub": email})

@@ -25,6 +25,14 @@ app.include_router(contacts.router, prefix='/api')
 app.include_router(users.router, prefix='/api')
 @app.on_event("startup")
 async def startup():
+    """
+    The startup function is called when the application starts up.
+    It's a good place to initialize things that are needed by your app,
+    like connecting to databases or initializing caches.
+
+    :return: A list of coroutines
+    :doc-author: Trelent
+    """
     r = await redis.Redis(
         host=config.REDIS_DOMAIN,
         port=config.REDIS_PORT,
@@ -34,10 +42,25 @@ async def startup():
     await FastAPILimiter.init(r)
 @app.get('/')
 def index():
-    return {'message', 'Todo Application'}
+    """
+    The index function responds to a request for /api/v2/contacts by
+        returning all contacts. It has no parameters.
+
+    :return: The string 'contacts application'
+    :doc-author: Trelent
+    """
+    return {'message', 'Contacts Application'}
 
 @app.get("/api/healthchecker")
 async def healthchecker(db: AsyncSession = Depends(get_db)):
+    """
+    The healthchecker function is a simple function that checks the health of the database.
+    It does this by executing a SQL query to check if it can connect to the database and retrieve data.
+
+    :param db: AsyncSession: Pass the database session to the healthchecker function
+    :return: A dictionary with a message
+    :doc-author: Trelent
+    """
     try:
         result = await db.execute(text("SELECT 1"))
         result = result.fetchone()
